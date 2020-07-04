@@ -17,6 +17,10 @@ In browser user could load http://172.25.1.1
 
 and authenticate with **user/pass=iblocker/test1234**
 
+OR
+Download the image from https://www.2transfer.eu/iblocker/PI4_Paranoid_4JUL2020.zip  unzip it and flash it to microSD card.
+
+
 ![](https://www.2transfer.eu/github/pics/firstpage.JPG)
 
 
