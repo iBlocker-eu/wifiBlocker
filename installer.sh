@@ -2,7 +2,7 @@
 ### version 1.0  
 #### 1. As user pi, ssh to Pi4 then create folder:   mkdir /tmp/IB
 #### 2. Transfer installer.sh to /tmp/IB
-#### 3. chmod /tmp/IB/installer.sh
+#### 3. chmod 755 /tmp/IB/installer.sh
 #### 4. sudo /tmp/IB/installer.sh
 
 
