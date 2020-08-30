@@ -1,5 +1,6 @@
 #!/bin/bash
 ### version 1.0  
+#### 0. Download Raspberry Pi OS (32-bit) Lite (Minimal image based on Debian Buster) and write it to Pi3/Pi4 microSD card  
 #### 1. As user pi, ssh to Pi4 then create folder:   mkdir /tmp/IB
 #### 2. sudo wget https://www.2transfer.eu/iblocker/installer.sh -P /tmp/IB
 #### 3. sudo chmod 755 /tmp/IB/installer.sh
