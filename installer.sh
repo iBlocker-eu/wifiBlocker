@@ -1,10 +1,13 @@
 #!/bin/bash
-### version 1.0  
-#### 0. Download Raspberry Pi OS (32-bit) Lite (Minimal image based on Debian Buster) and write it to Pi3/Pi4 microSD card  
-#### 1. As user pi, ssh to Pi4 then create folder:   mkdir /tmp/IB
-#### 2. sudo wget https://www.2transfer.eu/iblocker/installer.sh -P /tmp/IB
-#### 3. sudo chmod 755 /tmp/IB/installer.sh
-#### 4. sudo /tmp/IB/installer.sh
+### version 1.0  - 11JAN 2020 - commented dnsmasq and added radvd, and bind9  and new dhcpd and dhcppd6.conf files
+### version 1.1 - 02MAY2020 - added sudo mkdir -p /var/www/html/CRYPTO/ 2>&1 | tee -a /tmp/IB/installer.log
+### version 1.1.1 - 1 June 2020 - installed sudo cpan -i Crypt::Twofish and added below crontabs:
+##############
+##############
+### version 1.1.2 - added sudo apt-get -y install netfilter-persistent ipset-persistent iptables-persistent 
+### version 1.1.3 - enabled ssh with 
+      ###### sudo systemctl enable ssh
+      ###### sudo systemctl start ssh 
 
 
 echo "HANDLE THE BLOCKED COUNTRIES-YES OR NO"
@@ -12,6 +15,11 @@ dt=`date '+%d_%m_%Y_%H_%M_%S'`
 echo "$dt" 2>/dev/null 2>&1  | tee -a /tmp/IB/installer.log
 sudo rfkill unblock all
 sudo rm /dev/rfkill  ####### wlan0 blocked by fkill
+
+echo "Enable SSH"
+sudo systemctl enable ssh 2>&1  | tee -a /tmp/IB/installer.log
+sudo systemctl start ssh  2>&1  | tee -a /tmp/IB/installer.log
+
 
 sudo apt update 2>&1  | tee -a /tmp/IB/installer.log
 apt-get -y upgrade   2>&1  | tee -a /tmp/IB/installer.log
@@ -22,6 +30,7 @@ apt-get -y upgrade   2>&1  | tee -a /tmp/IB/installer.log
 #### packets to be installed ######################## 
  sudo apt-get -y install tar sed ipset dos2unix apache2 nmap  arp-scan libcgi-session-perl libssl-dev libdevice-serialport-perl libdevice-modem-perl tcpdump pulseaudio-module-bluetooth evtest 2>&1  | tee -a /tmp/IB/installer.log
 sudo apt-get -y install isc-dhcp-server radvd bind9 bind9utils dnsutils hostapd  mc 2>&1  | tee -a /tmp/IB/installer.log
+sudo apt-get -y install netfilter-persistent ipset-persistent iptables-persistent
 
 
 ################# install AP #######################
@@ -63,7 +72,7 @@ iptables -N BLOCKED 2>&1  | tee -a /tmp/IB/installer.log   ###
 
 #####echo " supposed root ssh keys are generated with ssh-keygen "
 echo " unzip piwall.tar.gz "  2>&1 | tee -a /tmp/IB/installer.log
-sudo wget https://www.2transfer.eu/iblocker/IBlocker_OK.tar.gz -P /tmp/IB 2>&1 | tee -a /tmp/IB/installer.log
+sudo wget https://www.2transfer.eu/iblocker/IBlocker.tar.gz -P /tmp/IB 2>&1 | tee -a /tmp/IB/installer.log
 sudo chmod 755 /tmp/IB/IBlocker*.tar.gz 2>&1 | tee -a /tmp/IB/installer.log
 sudo tar xvzf /tmp/IB/IBlocker*.tar.gz -C /tmp/IB 2>&1 | tee -a /tmp/IB/installer.log
 sudo mkdir /opt/IB 2>&1 | tee -a /tmp/IB/installer.log
@@ -92,7 +101,7 @@ sudo cp -R /tmp/IB/ARCHIVE/piwall_cgi/* /usr/lib/cgi-bin/piwall/ 2>&1 | tee -a /
 sudo cp -R /tmp/IB/ARCHIVE/css/ /var/www/html/ 2>&1 | tee -a /tmp/IB/installer.log
 sudo cp -R /tmp/IB/ARCHIVE/BLOCKED_COUNTRIES/ /opt/IB/ 2>&1 | tee -a /tmp/IB/installer.log
 sudo cp  /tmp/IB/ARCHIVE/iptables*  /etc  2>&1 | tee -a /tmp/IB/installer.log
-sudo iptables-restore < /etc/iptables.ipv4.nat  2>&1 | tee -a /tmp/IB/installer.log
+###sudo iptables-restore < /etc/iptables.ipv4.nat  2>&1 | tee -a /tmp/IB/installer.log
 sudo cp  /tmp/IB/ARCHIVE/hostapd/*  /etc/hostapd  2>&1 | tee -a /tmp/IB/installer.log
 sudo cp  /tmp/IB/ARCHIVE/dhcp/dhcpd.conf*  /etc/dhcp/  2>&1 | tee -a /tmp/IB/installer.log
 sudo cp  /tmp/IB/ARCHIVE/dhcp/dhcpd6.conf*  /etc/dhcp/  2>&1 | tee -a /tmp/IB/installer.log
@@ -185,7 +194,9 @@ sudo systemctl start bind9 2>&1  | tee -a /tmp/IB/installer.log
 sudo systemctl enable isc-dhcp-server 2>&1  | tee -a /tmp/IB/installer.log
 sudo systemctl start isc-dhcp-server  2>&1  | tee -a /tmp/IB/installer.log
 ##sudo /usr/sbin/dhcpd -6 -q -cf /etc/dhcp/dhcpd6.conf
-
+echo "################ SAVE NETFILTER (iptables) ###################"  2>&1 | tee -a /tmp/IB/installer.log
+sudo iptables-restore < /etc/iptables.ipv4.nat  2>&1 | tee -a /tmp/IB/installer.log
+sudo netfilter-persistent save
 
 sudo cp /etc/bind/resolv.conf /etc 2>&1 | tee -a /tmp/IB/installer.log
 sudo /etc/init.d/ssh restart  2>&1 | tee -a /tmp/IB/installer.log
