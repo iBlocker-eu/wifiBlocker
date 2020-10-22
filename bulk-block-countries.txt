@@ -1,3 +1,5 @@
+List of all countries available below. Customer could load it in iBlocker: Menu->Config->Countries List Upload->Block COUNTRIES 
+
 ax
 af
 al
