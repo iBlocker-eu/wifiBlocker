@@ -196,8 +196,11 @@ sudo systemctl start isc-dhcp-server  2>&1  | tee -a /tmp/IB/installer.log
 ##sudo /usr/sbin/dhcpd -6 -q -cf /etc/dhcp/dhcpd6.conf
 echo "################ SAVE NETFILTER (iptables) ###################"  2>&1 | tee -a /tmp/IB/installer.log
 sudo iptables-restore < /etc/iptables.ipv4.nat  2>&1 | tee -a /tmp/IB/installer.log
-sudo /sbin/iptables-save > /etc/iptables/rules.v4
-sudo /sbin/ip6tables-save > /etc/iptables/rules.v6
+sudo iptables-restore < /etc/iptables.ipv6.nat  2>&1 | tee -a /tmp/IB/installer.log
+sudo cp /etc/iptables.ipv4.nat /etc/iptables/rules.v4
+sudo cp /etc/iptables.ipv6.nat /etc/iptables/rules.v6
+#sudo /sbin/iptables-save > /etc/iptables/rules.v4
+#sudo /sbin/ip6tables-save > /etc/iptables/rules.v6
 sudo netfilter-persistent save
 
 sudo cp /etc/bind/resolv.conf /etc 2>&1 | tee -a /tmp/IB/installer.log
