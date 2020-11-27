@@ -194,14 +194,13 @@ sudo systemctl start bind9 2>&1  | tee -a /tmp/IB/installer.log
 sudo systemctl enable isc-dhcp-server 2>&1  | tee -a /tmp/IB/installer.log
 sudo systemctl start isc-dhcp-server  2>&1  | tee -a /tmp/IB/installer.log
 ##sudo /usr/sbin/dhcpd -6 -q -cf /etc/dhcp/dhcpd6.conf
-echo "################ SAVE NETFILTER (iptables) ###################"  2>&1 | tee -a /tmp/IB/installer.log
+echo "################ iptables RESTORE ###################"  2>&1 | tee -a /tmp/IB/installer.log
+##sudo chmod 777 /etc/modules
+###sudo modprobe ip_tables
+###sudo echo 'ip_tables' >> /etc/modules
+##sudo chmod 644 /etc/modules
 sudo iptables-restore < /etc/iptables.ipv4.nat  2>&1 | tee -a /tmp/IB/installer.log
 sudo iptables-restore < /etc/iptables.ipv6.nat  2>&1 | tee -a /tmp/IB/installer.log
-sudo cp /etc/iptables.ipv4.nat /etc/iptables/rules.v4
-sudo cp /etc/iptables.ipv6.nat /etc/iptables/rules.v6
-#sudo /sbin/iptables-save > /etc/iptables/rules.v4
-#sudo /sbin/ip6tables-save > /etc/iptables/rules.v6
-sudo netfilter-persistent save
 
 sudo cp /etc/bind/resolv.conf /etc 2>&1 | tee -a /tmp/IB/installer.log
 sudo /etc/init.d/ssh restart  2>&1 | tee -a /tmp/IB/installer.log
@@ -219,9 +218,19 @@ sudo a2dismod -f deflate  | tee -a /tmp/IB/installer.log
 sleep 1s
 sudo service apache2 restart 2>&1  | tee -a /tmp/IB/installer.log
  echo "################ APACHE a2enmod STOP ###################"  2>&1 | tee -a /tmp/IB/installer.logc
- 
+
 
 sudo apt autoremove -y 2>&1 | tee -a /tmp/IB/installer.log
 sudo cp /tmp/IB/installer.log /home/pi/ 2>&1 | tee -a /tmp/IB/installer.log
+
+ echo "################ cp iptables to rules ###################"  2>&1 | tee -a /tmp/IB/installer.log
+sudo netfilter-persistent save
+sudo cp /etc/iptables.ipv4.nat /etc/iptables/rules.v4
+sudo cp /etc/iptables.ipv6.nat /etc/iptables/rules.v6
+#sudo /sbin/iptables-save > /etc/iptables/rules.v4
+#sudo /sbin/ip6tables-save > /etc/iptables/rules.v6
+####sudo netfilter-persistent save
+##############################################
+
 sudo rm /tmp/IB -R
 sudo reboot
