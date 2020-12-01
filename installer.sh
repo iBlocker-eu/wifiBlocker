@@ -30,7 +30,7 @@ apt-get -y upgrade   2>&1  | tee -a /tmp/IB/installer.log
 #### packets to be installed ######################## 
  sudo apt-get -y install tar sed ipset dos2unix apache2 nmap  arp-scan libcgi-session-perl libssl-dev libdevice-serialport-perl libdevice-modem-perl tcpdump pulseaudio-module-bluetooth evtest 2>&1  | tee -a /tmp/IB/installer.log
 sudo apt-get -y install isc-dhcp-server radvd bind9 bind9utils dnsutils hostapd  mc 2>&1  | tee -a /tmp/IB/installer.log
-sudo apt-get -y install netfilter-persistent ipset-persistent iptables-persistent
+sudo apt-get -y install netfilter-persistent ipset-persistent iptables-persistent whois
 
 
 ################# install AP #######################
