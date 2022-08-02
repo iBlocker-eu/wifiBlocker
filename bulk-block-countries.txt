@@ -1,5 +1,4 @@
 List of all countries available below - add it into a text file. Customer could load it in iBlocker: Menu->Config->Countries List Upload->Block COUNTRIES 
-
 ad
 ae
 af
@@ -8,7 +7,6 @@ ai
 al
 am
 ao
-aq
 ar
 as
 at
